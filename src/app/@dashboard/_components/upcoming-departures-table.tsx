@@ -79,7 +79,6 @@ export const UpcomingDeparturesTable = () => {
    }
   });
 
-  console.log(table.getFilteredRowModel().flatRows)
   return (
     <Box
     bg="white" _dark={{ bg: "gray.800" }} 

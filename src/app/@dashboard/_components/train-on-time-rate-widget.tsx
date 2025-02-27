@@ -2,17 +2,21 @@
 import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuClock } from "react-icons/lu";
-
+import { getTrainOnTimeRate } from "./fetch-data";
 const useOnTimeRate = () => {
   // Placeholder for the hook that will fetch data
-  const [data, setData] = useState({ value: 0, change: 0, period: "" });
+  const [data, setData] = useState<Awaited<ReturnType<typeof getTrainOnTimeRate>>>();
 
   useEffect(() => {
-    // Simulate fetching data
-    setData({ value: 92.4, change: 2.1, period: "last week" });
+    const fetchData = async () => {
+      const result = await fetch("/api/train");
+      const data = await result.json();
+      setData(data);
+    };
+    fetchData();
   }, []);
 
-  return data;
+  return data ?? { value: 0, change: 0, period: "" };
 };
 
 export const OnTimeRateWidget = () => {
@@ -42,7 +46,7 @@ export const OnTimeRateWidget = () => {
             ↑ {change}%
           </Text>
           <Text fontSize="md" color="gray.500">
-            vs {period}
+            vs last {period}
           </Text>
         </HStack>
       </VStack>

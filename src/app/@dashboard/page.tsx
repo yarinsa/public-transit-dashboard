@@ -89,7 +89,7 @@ const Dashboard = () => {
       <DashboardHeader />
     </GridItem>
     <GridItem>
-      <OnTimeRateWidget />
+        <OnTimeRateWidget />
     </GridItem>
     <GridItem>
       <DailyRidersWidget />
