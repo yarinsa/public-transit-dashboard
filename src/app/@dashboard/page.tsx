@@ -1,10 +1,14 @@
-import { Button, Grid, GridItem, HStack } from "@chakra-ui/react";
+import { Grid, GridItem, HStack } from "@chakra-ui/react";
+import { ActiveBusesWidget } from "./_components/active-buses-widget";
+import { AverageSpeedWidget } from "./_components/average-speed-widget";
+import { BusFrequencyChart } from "./_components/bus-frequency-chart";
+import { DailyRidersWidget } from "./_components/daily-riders-widget";
 import DashboardHeader from "./_components/header";
-import { LuArrowRight } from "react-icons/lu";
-import auth from "@/lib/auth";
-import Link from "next/link";
 import { LogoutButton } from "./_components/LogoutButton";
-
+import { OnTimeRateWidget } from "./_components/train-on-time-rate-widget";
+import { TrainPunctualityWidget } from "./_components/train-punctuality-widget";
+import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stats = [
   {
     label: `On-Time Rate`,
@@ -40,6 +44,7 @@ const stats = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const graphs = [
   {
     label: `Punctuality rate (%) over time`,
@@ -58,6 +63,7 @@ const graphs = [
 ];
 
 // Show in table
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const upcomingDepartures = [
   {
     line: `A1`,
@@ -78,10 +84,31 @@ const upcomingDepartures = [
 
 const Dashboard = () => {
 
-  return <HStack> <Grid>
-    <GridItem gridColumn="1 / -1" bg="white" boxShadow="md" borderRadius="md" p={4}>
+  return <HStack> <Grid gap={4} templateColumns="repeat(4, 1fr)">
+    <GridItem gridColumn="1 / -1" boxShadow="md" borderRadius="md">
       <DashboardHeader />
     </GridItem>
+    <GridItem>
+      <OnTimeRateWidget />
+    </GridItem>
+    <GridItem>
+      <DailyRidersWidget />
+    </GridItem>
+    <GridItem>
+      <ActiveBusesWidget />
+    </GridItem>
+    <GridItem>
+      <AverageSpeedWidget />
+    </GridItem>
+    <GridItem gridColumn="1 / 3" boxShadow="md" borderRadius="md">
+      <TrainPunctualityWidget />
+    </GridItem>
+    <GridItem gridColumn="3 / 5" boxShadow="md" borderRadius="md">
+      <BusFrequencyChart />
+    </GridItem>
+    <GridItem gridColumn="1 / -1" boxShadow="md" borderRadius="md" >
+          <UpcomingDeparturesTable />
+        </GridItem>
   </Grid>
   <LogoutButton />
   </HStack>

@@ -15,7 +15,7 @@ const DashboardHeader = () => {
   const isActive = (value: string) => methods.includes(value);
   const onMethodClick = (value: string) => setMethods(prev => value === "all" ? ["all"] : [...prev, value].filter(m => m !== "all"));
   return (
-    <VStack justify="space-between" align="start">
+    <VStack justify="space-between" align="start" bg="white" _dark={{bg: "gray.800"}} boxShadow="md" borderRadius="md" p={4}>
       <VStack align="start">
         <Heading size="lg">Transit Metrics Dashboard</Heading>
         <Text fontSize="md" color="gray.600">
