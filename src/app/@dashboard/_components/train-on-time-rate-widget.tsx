@@ -2,7 +2,7 @@
 import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuClock } from "react-icons/lu";
-import { getTrainOnTimeRate } from "./fetch-data";
+import { getTrainOnTimeRate } from "../../api/train/fetch";
 const useOnTimeRate = () => {
   // Placeholder for the hook that will fetch data
   const [data, setData] = useState<Awaited<ReturnType<typeof getTrainOnTimeRate>>>();

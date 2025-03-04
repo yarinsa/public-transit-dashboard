@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const REFRESH_INTERVAL = 60 * 60 * 24; // 24 hours
+const RESOURCE_ID = "1ebbbb91-1d44-4f41-a85c-4a93a35e32d6";
 const statusEnum = z.enum(["הקדמה ביציאה", "איחור", "בזמן"]);
 const statusMap = {
     "הקדמה ביציאה": "early",
@@ -24,15 +26,16 @@ const recordSchema = z.object({
 
 type ResponseRecord = z.infer<typeof recordSchema>;
 export async function getTrainOnTimeRate() {
-  const resourceId = "1ebbbb91-1d44-4f41-a85c-4a93a35e32d6";
   const limit = 1_000;
   const q = '';
   const year = 2025;
-  const currentMonth = new Date().getMonth() + 1;
+  // const currentMonth = new Date().getMonth() + 1;
+  const currentMonth = new Date().getMonth();
   const previousMonth = currentMonth - 1;
+  // const previousMonth = currentMonth;
   // Construct the URL with query parameters using URLSearchParams
   const params = new URLSearchParams({
-    resource_id: resourceId,
+    resource_id: RESOURCE_ID,
     limit: limit.toString(),
     filters: JSON.stringify({
       shana: year,
@@ -43,7 +46,7 @@ export async function getTrainOnTimeRate() {
   const url = `https://data.gov.il/api/3/action/datastore_search?${params.toString()}`;
     try {
         
-       const response = await fetch(url)
+       const response = await fetch(url, {next: {revalidate: REFRESH_INTERVAL}})
       if (!response.ok) {
           const body = await response.text();
           console.error(body);
