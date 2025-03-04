@@ -5,15 +5,20 @@ import { LuUser } from "react-icons/lu";
 
 const useDailyRiders = () => {
   // Placeholder for the hook that will fetch data
-  const [data, setData] = useState({ value: 0, change: 0, period: "" });
+  const [data, setData] = useState<Awaited<ReturnType<typeof getTrainOnTimeRate>>>();
 
   useEffect(() => {
-    // Simulate fetching data
-    setData({ value: 145832, change: -1.3, period: "yesterday" });
+    const fetchData = async () => {
+      const result = await fetch("/api/passengers");
+      const data = await result.json();
+      setData(data);
+    };
+    fetchData();
   }, []);
 
-  return data;
+  return data ?? { value: 0, change: 0, period: "" };
 };
+
 
 export const DailyRidersWidget = () => {
   const { value, change, period } = useDailyRiders();
