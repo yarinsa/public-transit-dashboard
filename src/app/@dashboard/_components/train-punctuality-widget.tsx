@@ -3,26 +3,32 @@
 import { useColorMode } from "@/components/ui/color-mode";
 import { Box, Text, useToken, VStack } from "@chakra-ui/react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
 
-// Hardcoded data from the provided description
-const data = [
-  { month: 'Jan', rate: 87 },
-  { month: 'Feb', rate: 84 },
-  { month: 'Mar', rate: 93 },
-  { month: 'Apr', rate: 96 },
-  { month: 'May', rate: 90 },
-  { month: 'Jun', rate: 87 },
-  { month: 'Jul', rate: 87 },
-];
+const useTrainPunctualityRate = () => {
+  // Placeholder for the hook that will fetch data
+  const [data, setData] = useState<{ data?: any, error?: any }>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch("/api/train-overtime");
+      const data = await result.json();
+      setData(data);
+    };
+    fetchData();
+  }, []);
+
+  return { ...data }
+};
 
 export const TrainPunctualityWidget = () => {
   // Adaptive colors for light and dark modes
   const { colorMode } = useColorMode();
-  const [gray200,   gray500, green300, green500] = useToken("colors", ["gray.200", "gray.500", "green.300", "green.500"]);
-  const axisColor = colorMode === "dark" ? gray500 : gray200;
-  const gridColor = colorMode === "dark" ? gray500 : gray200;
-  const lineColor = colorMode === "dark" ? green500 : green300;
-
+  const [gray300,   gray500, green600] = useToken("colors", ["gray.300", "gray.500", "green.600"]);
+  const axisColor = colorMode === "dark" ? gray300 : gray500;
+  const gridColor = gray500;
+  const lineColor = green600;
+  const {data} = useTrainPunctualityRate();
   return (
     <Box
       bg="white"
@@ -30,31 +36,42 @@ export const TrainPunctualityWidget = () => {
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="100%" // Responsive width
+      width="100%" 
     >
       <VStack align="start">
-        <Text fontSize="xl" fontWeight="bold" >
+        <Text fontSize="md">
           Train Punctuality Rate (%)
         </Text>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
           <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
             <XAxis
               dataKey="month"
-              tick={{ fill: axisColor, fontSize: 12 }}
-              interval={0} // Show all month labels
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(value) => {
+                console.log(value)
+                const date = new Date()
+                date.setMonth(value - 1)
+                const month = date.toLocaleString('default', { month: 'short' })
+                return month
+              }}
+              tick={{ fontSize: 12, fill: axisColor }}
             />
             <YAxis
-              domain={[84, 96]}
-              ticks={[84, 87, 90, 93, 96]}
-              tick={{ fill: axisColor, fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 12, fill: axisColor }}
+              domain={["auto", "auto"]}
             />
             <Line
               type="monotone"
               dataKey="rate"
               stroke={lineColor}
-              dot={{ stroke: lineColor, strokeWidth: 1, fill: "white", r: 4 }}
-              activeDot={{ r: 6, fill: lineColor }} // Enlarge on hover
+              strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 5, strokeWidth: 0 }}
+              animationDuration={1500}
             />
             <Tooltip
               contentStyle={{ backgroundColor: "white", border: "1px solid gray" }}
