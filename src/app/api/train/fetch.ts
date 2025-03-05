@@ -1,30 +1,8 @@
-import { z } from "zod";
+import { type ResponseRecord, recordSchema } from "./schema";
 
 const REFRESH_INTERVAL = 60 * 60 * 24; // 24 hours
 const RESOURCE_ID = "1ebbbb91-1d44-4f41-a85c-4a93a35e32d6";
-const statusEnum = z.enum(["הקדמה ביציאה", "איחור", "בזמן"]);
-const statusMap = {
-    "הקדמה ביציאה": "early",
-    "איחור": "late",
-    "בזמן": "on time",
-}
-const recordSchema = z.object({
-    shana: z.number(),
-    hodesh: z.number(),
-    train_station_nm: z.string(),
-    station_status_nm: statusEnum,
-    status_count: z.number(),
-}).transform((record) => ({
-    year: record.shana,
-    month: record.hodesh,
-    station_name: record.train_station_nm,
-    status: statusMap[record.station_status_nm],
-    count: record.status_count,
-}));
 
-
-
-type ResponseRecord = z.infer<typeof recordSchema>;
 export async function getTrainOnTimeRate() {
   const limit = 1_000;
   const q = '';
@@ -76,7 +54,7 @@ export async function getTrainOnTimeRate() {
   function calculateOnTimeRate(records: ResponseRecord[]) {
     // Step 1: Get unique year-month pairs and sort them
     const yearMonths = Array.from(
-        new Set(records.map(r => `${r.year}-${r.month}`))
+        new Set(records.map(r => `${r.shana}-${r.hodesh}`))
     )
         .map(ym => ym.split('-').map(Number))
         .sort((a, b) => a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]);
@@ -93,13 +71,13 @@ export async function getTrainOnTimeRate() {
     // Helper function to calculate the on-time rate for a given year-month
     const getRate = (ym: number[]) => {
         const monthRecords = records.filter(
-            r => r.year === ym[0] && r.month === ym[1]
+            r => r.shana === ym[0] && r.hodesh === ym[1]
         );
         const sumOnTime = monthRecords
-            .filter(r => r.status === "on time")
-            .reduce((acc, r) => acc + r.count, 0);
+            .filter(r => r.station_status_nm === "בזמן")
+            .reduce((acc, r) => acc + r.status_count, 0);
         const totalCount = monthRecords
-            .reduce((acc, r) => acc + r.count, 0);
+            .reduce((acc, r) => acc + r.status_count, 0);
         
         // Handle case where totalCount is 0 to avoid division by zero
         return totalCount === 0 ? 0 : (sumOnTime / totalCount) * 100;
