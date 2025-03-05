@@ -1,17 +1,30 @@
 'use client'
+import type { Record } from "@/app/api/upcoming-departures/schema";
 import { InputGroup } from "@/components/ui/input-group";
 import { Box, HStack, Icon, Input, Table, Text, VStack } from "@chakra-ui/react";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheckCircle, FaClock, FaExclamationCircle, FaSearch } from "react-icons/fa";
 
-const data = [
-    { line: 'A1', type: 'Train', destination: 'Central Station', status: 'On Time', nextDeparture: '10:15 AM' },
-    { line: 'T5', type: 'Tram', destination: 'City Center', status: 'On Time', nextDeparture: '10:22 AM' },
-    { line: 'B22', type: 'Bus', destination: 'Airport Terminal', status: '5 min delay', nextDeparture: '10:30 AM' },
-    { line: 'M3', type: 'Metro', destination: 'West Station', status: 'Cancelled', nextDeparture: '10:45 AM' },
-    { line: 'A2', type: 'Train', destination: 'North District', status: '10 min delay', nextDeparture: '10:50 AM' },
-  ]
+const useUpcomingDeparturesData =  () => {
+  const [data, setData] = useState<Record[]>([])
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/api/upcoming-departures')
+      const data = await response.json()
+      setData(data.data)
+    }
+    fetchData()
+  }, [])
+  return {data} 
+}
+// const data = [
+//     { line: 'A1', type: 'Train', destination: 'Central Station', status: 'On Time', nextDeparture: '10:15 AM' },
+//     { line: 'T5', type: 'Tram', destination: 'City Center', status: 'On Time', nextDeparture: '10:22 AM' },
+//     { line: 'B22', type: 'Bus', destination: 'Airport Terminal', status: '5 min delay', nextDeparture: '10:30 AM' },
+//     { line: 'M3', type: 'Metro', destination: 'West Station', status: 'Cancelled', nextDeparture: '10:45 AM' },
+//     { line: 'A2', type: 'Train', destination: 'North District', status: '10 min delay', nextDeparture: '10:50 AM' },
+//   ]
 
 
 const helper = createColumnHelper<typeof data[number]>();
@@ -50,11 +63,16 @@ const columns = [
     }),
     helper.accessor('nextDeparture', {
       header: 'Next Departure',
+      cell: ({ getValue }) => {
+        const value = getValue();
+        const localTime = new Date(value).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jerusalem' });
+        return localTime;
+      },
     }),
   ];
 
 export const UpcomingDeparturesTable = () => {
-//   const data = useUpcomingDeparturesData();
+  const {data} = useUpcomingDeparturesData();
   const [globalFilter, setGlobalFilter] = useState("");
   const table = useReactTable({
     columns,
