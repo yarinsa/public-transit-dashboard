@@ -3,8 +3,13 @@ import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuBusFront } from "react-icons/lu";
 
+type ActiveBusesData = {
+  active: number;
+  total: number;
+}
+
 const useActiveBuses = () => {
-  const [data, setData] = useState<{ data?: any, error?: any }>({});
+  const [data, setData] = useState<{ data?: ActiveBusesData, error?: unknown }>({});
 
   useEffect(() => {
     const fetchData = async () => {

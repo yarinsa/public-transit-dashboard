@@ -13,8 +13,8 @@ export const LogoutButton = () => {
 
   return (
     <Tooltip content="Logout">
-        <Button variant="ghost" onClick={onLogout}>
-          <LuLogOut />
+        <Button size="sm" variant="ghost" onClick={onLogout}>
+          <LuLogOut opacity={0.8} />
         </Button>
     </Tooltip>
   );

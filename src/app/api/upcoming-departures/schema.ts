@@ -21,3 +21,11 @@ export const recordSchema = z.object({
 })
 
 export type Record = z.infer<typeof recordSchema>;
+
+export type DepartureDTO = {
+  line: string;
+  type: string;
+  destination: string;
+  status: string;
+  nextDeparture: string;
+}

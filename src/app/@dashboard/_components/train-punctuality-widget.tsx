@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const useTrainPunctualityRate = () => {
   // Placeholder for the hook that will fetch data
-  const [data, setData] = useState<{ data?: any, error?: any }>({});
+  const [data, setData] = useState<{ data?: unknown[], error?: unknown }>({});
 
   useEffect(() => {
     const fetchData = async () => {

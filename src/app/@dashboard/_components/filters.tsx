@@ -20,7 +20,8 @@ export const Filters = () => {
   return (
     <ButtonGroup gap={4}>
     {items.map(({label, value, colorPalette, icon}) => (
-      <Button px={4} key={value} variant={isActive(value) ? "solid" : "outline"} colorPalette={colorPalette} onClick={() => onMethodClick(value)}>
+      <Button px={4} size="sm" key={value} variant={isActive(value) ? "solid" : "ghost"} colorPalette={isActive(value) ? colorPalette : "gray"} onClick={() => onMethodClick(value)} 
+      >
         {icon}
         {label}
       </Button>

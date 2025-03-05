@@ -1,5 +1,5 @@
 'use client'
-import type { Record } from "@/app/api/upcoming-departures/schema";
+import type { DepartureDTO } from "@/app/api/upcoming-departures/schema";
 import { InputGroup } from "@/components/ui/input-group";
 import { Box, HStack, Icon, Input, Table, Text, VStack } from "@chakra-ui/react";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FaCheckCircle, FaClock, FaExclamationCircle, FaSearch } from "react-icons/fa";
 
 const useUpcomingDeparturesData =  () => {
-  const [data, setData] = useState<Record[]>([])
+  const [data, setData] = useState<DepartureDTO[]>([])
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('/api/upcoming-departures')
@@ -27,7 +27,7 @@ const useUpcomingDeparturesData =  () => {
 //   ]
 
 
-const helper = createColumnHelper<typeof data[number]>();
+const helper = createColumnHelper<DepartureDTO>();
 const columns = [
     helper.accessor('line', {
       header: 'Line',
