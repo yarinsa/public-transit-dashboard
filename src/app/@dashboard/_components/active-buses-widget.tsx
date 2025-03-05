@@ -1,45 +1,51 @@
 'use client'
 import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LuBus } from "react-icons/lu";
+import { LuBusFront } from "react-icons/lu";
 
 const useActiveBuses = () => {
-  // Placeholder for the hook that will fetch data
-  const [data, setData] = useState({ active: 0, total: 0 });
+  const [data, setData] = useState<{ data?: any, error?: any }>({});
 
   useEffect(() => {
-    // Simulate fetching data
-    setData({ active: 126, total: 130 });
+    const fetchData = async () => {
+      const result = await fetch("/api/bus/fleet");
+      const data = await result.json();
+      setData(data);
+    };
+    fetchData();
   }, []);
 
-  return data;
+  return { ...data }
 };
 
+
+
 export const ActiveBusesWidget = () => {
-  const { active, total } = useActiveBuses();
+  const { data } = useActiveBuses();
+  const { active, total } = data || { active: 0, total: 0 };
 
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="300px"
     >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="lg" fontWeight="bold">
+      <VStack align="stretch">
+        <HStack justify="space-between">
+          <Text>
             Active Buses
           </Text>
-          <Icon as={LuBus} boxSize={6} color="orange.500" />
+          <Icon as={LuBusFront} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="orange.600" />
         </HStack>
-        <Text fontSize="3xl" fontWeight="bold">
-          {active}
+        <HStack justify="space-between">
+        <Text fontSize="2xl" fontWeight="bold">
+          {Number(active).toLocaleString()}
         </Text>
         <Text fontSize="md" color="gray.500">
-          Out of {total} total
+          Out of {Number(total).toLocaleString()} total
         </Text>
+        </HStack>
       </VStack>
     </Box>
   );
