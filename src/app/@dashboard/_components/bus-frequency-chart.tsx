@@ -1,5 +1,5 @@
 'use client'
-import { Box, Text, useToken } from "@chakra-ui/react";
+import { Box, Text, useToken, VStack } from "@chakra-ui/react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
 import { useColorMode } from "@/components/ui/color-mode";
@@ -26,11 +26,11 @@ const useBusFrequencyData = () => {
 export const BusFrequencyChart = () => {
   const data = useBusFrequencyData();
   const { colorMode } = useColorMode();
-  const [gray200, gray500, gray600, orange300, orange500] = useToken("colors", ["gray.200", "gray.500", "gray.600", "orange.300", "orange.500"]);
+  const [gray300, gray500, orange600, black] = useToken("colors", ["gray.300", "gray.500", "orange.600", "black"]);
   // Adaptive colors for light and dark modes
-  const axisColor = colorMode === "dark" ? gray500 : gray200;
-  const gridColor = colorMode === "dark" ? gray600 : gray200;
-  const barColor = colorMode === "dark" ? orange300 : orange500;
+  const axisColor = colorMode === "dark" ? gray300 : gray500;
+  const gridColor = gray500;
+  const barColor = orange600;
 
   return (
     <Box
@@ -39,22 +39,26 @@ export const BusFrequencyChart = () => {
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="100%"
-      maxW="100%" // Consistent with the train chart's width
-      height="300px"
+      height="100%"
+      width="100%" 
     >
-      <Text fontSize="lg" fontWeight="bold" mb={4}>
+      <VStack align="start">
+      <Text fontSize="md">
         Bus Frequency Per Day
       </Text>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+          <CartesianGrid  vertical={false} strokeDasharray="3 3" stroke={gridColor} />
           <XAxis
             dataKey="day"
+            axisLine={false}
+            tickLine={false}
             tick={{ fill: axisColor, fontSize: 12 }}
             interval={0} // Show all day labels
           />
           <YAxis
+            axisLine={false}
+            tickLine={false}
             tick={{ fill: axisColor, fontSize: 12 }}
             domain={[0, 200]} // Adjust based on data range
           />
@@ -63,9 +67,10 @@ export const BusFrequencyChart = () => {
             labelStyle={{ color: "black" }}
             itemStyle={{ color: barColor }}
           />
-          <Bar dataKey="frequency" fill={barColor} />
+          <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
+      </VStack>
     </Box>
   );
 };
