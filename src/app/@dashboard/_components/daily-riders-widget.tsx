@@ -1,11 +1,12 @@
 'use client'
+import type { getDailyRiders } from "@/app/api/passengers/fetch";
 import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuUser } from "react-icons/lu";
 
 const useDailyRiders = () => {
   // Placeholder for the hook that will fetch data
-  const [data, setData] = useState<Awaited<ReturnType<typeof getTrainOnTimeRate>>>();
+  const [data, setData] = useState<Awaited<ReturnType<typeof getDailyRiders>>>();
 
   useEffect(() => {
     const fetchData = async () => {

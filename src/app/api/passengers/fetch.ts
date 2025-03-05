@@ -1,21 +1,7 @@
 import { filter, groupBy, pivotLonger, startsWith, sum, summarize, tidy } from '@tidyjs/tidy';
-import { z } from "zod";
+import { recordSchema } from './schema';
 
 const RESOURCE_ID = "e72b10f3-4458-42c1-ba34-9b232feb8bc7";
-
-const daysSchema = z.record(z.string(), z.any());
-const recordSchema =z.union([z.object({
-    year_key: z.number(),
-    month_key: z.number(),
-    operator: z.string(),
-    // and D{day} for all days of the month (dynamic)
-}), daysSchema])
-.transform(({year_key,month_key,operator, ...record}) => ({
-    year: year_key,
-    month: month_key,
-    operator: operator,
-    ...(typeof record === 'object' && record ? record : {}),
-}));
 
 
 export async function getDailyRiders() {
@@ -39,7 +25,7 @@ export async function getDailyRiders() {
       if (!Array.isArray(records)) {
         return {
           value: "0",
-          change: "0.0",
+          change: 0,
           period: "yesterday",
         };
       }
@@ -53,6 +39,8 @@ export async function getDailyRiders() {
         groupBy('day', [summarize({
           total: sum('riders'),
           day: d => Number(d[0].day.replace('D', '')),
+          year: d => d[0].year,
+          month: d => d[0].month,
         })]),
         filter(r => r.day >= 1 && r.day <= 31),
       );
@@ -66,7 +54,7 @@ export async function getDailyRiders() {
 
       return {
         value: todayRiders.toLocaleString(),
-        change: change.toFixed(1),
+        change: Number(change.toFixed(1)),
         period: "yesterday",
       };
     } else {
@@ -76,7 +64,7 @@ export async function getDailyRiders() {
     console.error("Error fetching daily riders data:", error);
     return {
       value: "0",
-      change: "0.0",
+      change: 0,
       period: "yesterday",
     };
   }
