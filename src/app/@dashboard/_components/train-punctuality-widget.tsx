@@ -31,12 +31,11 @@ export const TrainPunctualityWidget = () => {
   const {data} = useTrainPunctualityRate();
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="100%" 
+      width="100%"
     >
       <VStack align="start">
         <Text fontSize="md">

@@ -2,7 +2,7 @@
 import type { getDailyRiders } from "@/app/api/passengers/fetch";
 import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LuUser } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
 
 const useDailyRiders = () => {
   // Placeholder for the hook that will fetch data
@@ -26,30 +26,30 @@ export const DailyRidersWidget = () => {
 
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="300px"
     >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="lg" fontWeight="bold">
+      <VStack align="stretch">
+        <HStack justify="space-between">
+          <Text>
             Daily Riders
           </Text>
-          <Icon as={LuUser} boxSize={6} color="purple.500" />
+          <Icon as={LuUsers} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="purple.600" />
         </HStack>
-        <Text fontSize="3xl" fontWeight="bold">
+        <HStack justify="space-between">
+        <Text fontSize="2xl" fontWeight="bold">
           {value.toLocaleString()}
         </Text>
         <HStack>
-          <Text fontSize="md" color={change < 0 ? "red.500" : "green.500"}>
+          <Text fontSize="md" color={Number(change) > 0 ? "green.500" : "red.500"}>
             {change < 0 ? "↓" : "↑"} {Math.abs(change)}%
           </Text>
           <Text fontSize="md" color="gray.500">
             vs {period}
           </Text>
+        </HStack>
         </HStack>
       </VStack>
     </Box>

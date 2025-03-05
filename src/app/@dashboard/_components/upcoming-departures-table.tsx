@@ -99,7 +99,7 @@ export const UpcomingDeparturesTable = () => {
 
   return (
     <Box
-    bg="white" _dark={{ bg: "gray.800" }} 
+      bg={`bg.subtle`}
       p={4}
       width="100%"
       borderRadius="md"
@@ -128,7 +128,7 @@ export const UpcomingDeparturesTable = () => {
                     borderBottom="1px solid"
                     textAlign="left"
                   >
-                    <HStack gap={1}>
+                    <HStack gap={2}>
                       {flexRender(column.column.columnDef.header, column.getContext())}
                     </HStack>
                   </Table.ColumnHeader>

@@ -24,30 +24,31 @@ export const OnTimeRateWidget = () => {
 
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="300px"
     >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="lg" fontWeight="bold">
+      <VStack align="stretch">
+        <HStack justify="space-between">
+          <Text>
             On-Time Rate
           </Text>
-          <Icon as={LuClock} boxSize={6} color="blue.500" />
+          <Icon as={LuClock} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="blue.600" />
         </HStack>
-        <Text fontSize="3xl" fontWeight="bold">
+
+        <HStack justify="space-between">
+        <Text fontSize="2xl" fontWeight="bold">
           {value}%
         </Text>
         <HStack>
-          <Text fontSize="md" color="green.500">
+          <Text fontSize="md" color={Number(change) > 0 ? "green.500" : "red.500"}>
             ↑ {change}%
           </Text>
           <Text fontSize="md" color="gray.500">
             vs last {period}
           </Text>
+        </HStack>
         </HStack>
       </VStack>
     </Box>

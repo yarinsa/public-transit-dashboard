@@ -21,21 +21,20 @@ export const AverageSpeedWidget = () => {
 
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
-      width="300px"
     >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="lg" fontWeight="bold">
+      <VStack align="stretch">
+        <HStack justify="space-between">
+          <Text>
             Average Speed
           </Text>
-          <Icon as={LuGauge} boxSize={6} color="green.500" />
+          <Icon as={LuGauge} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="green.600" />
         </HStack>
-        <Text fontSize="3xl" fontWeight="bold">
+        <HStack justify="space-between">
+        <Text fontSize="2xl" fontWeight="bold">
           {value} km/h
         </Text>
         <HStack>
@@ -45,6 +44,7 @@ export const AverageSpeedWidget = () => {
           <Text fontSize="md" color="gray.500">
             vs {period}
           </Text>
+        </HStack>
         </HStack>
       </VStack>
     </Box>

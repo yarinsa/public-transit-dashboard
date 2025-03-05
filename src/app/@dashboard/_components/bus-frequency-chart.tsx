@@ -26,7 +26,7 @@ const useBusFrequencyData = () => {
 export const BusFrequencyChart = () => {
   const data = useBusFrequencyData();
   const { colorMode } = useColorMode();
-  const [gray300, gray500, orange600, black] = useToken("colors", ["gray.300", "gray.500", "orange.600", "black"]);
+  const [gray300, gray500, orange600] = useToken("colors", ["gray.300", "gray.500", "orange.600"]);
   // Adaptive colors for light and dark modes
   const axisColor = colorMode === "dark" ? gray300 : gray500;
   const gridColor = gray500;
@@ -34,13 +34,12 @@ export const BusFrequencyChart = () => {
 
   return (
     <Box
-      bg="white"
-      _dark={{ bg: "gray.800" }}
+      bg={`bg.subtle`}
       boxShadow="md"
       borderRadius="md"
       p={4}
       height="100%"
-      width="100%" 
+      width="100%"
     >
       <VStack align="start">
       <Text fontSize="md">
