@@ -1,4 +1,4 @@
-import { Grid, GridItem, VStack } from "@chakra-ui/react";
+import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { ActiveBusesWidget } from "./_components/active-buses-widget";
 import { AverageSpeedWidget } from "./_components/average-speed-widget";
 import { BusFrequencyChart } from "./_components/bus-frequency-chart";
@@ -10,22 +10,60 @@ import { Filters } from "./_components/filters";
 
 const Dashboard = () => {
   return (
-    <VStack gap={4} align="stretch" padding={4}>
-    <Filters />
-    <Grid gap={4} templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gridAutoRows="auto" gridAutoFlow="row">
-      {[OnTimeRateWidget, DailyRidersWidget, ActiveBusesWidget, AverageSpeedWidget].map((Component, index) => (
-        <GridItem key={index}>
-          <Component />
+    <VStack gap={4} align="stretch" padding={{ base: 2, md: 4 }}>
+      <Box overflowX={{ base: "auto", md: "visible" }} width="100%">
+        <Filters />
+      </Box>
+      
+      {/* Small metric widgets - fully responsive with different layouts */}
+      <Grid 
+        gap={4} 
+        templateColumns={{
+          base: "1fr",                        // Mobile: 1 column
+          sm: "repeat(2, 1fr)",               // Small tablets: 2 columns
+          lg: "repeat(4, 1fr)"                // Desktop: 4 columns
+        }}
+      >
+        <GridItem>
+          <OnTimeRateWidget />
         </GridItem>
-      ))}
-      <GridItem colSpan={2}>
-        <TrainPunctualityWidget />
-      </GridItem>
-      <GridItem colSpan={2}>
-        <BusFrequencyChart />
-      </GridItem>
-    </Grid>
+        <GridItem>
+          <DailyRidersWidget />
+        </GridItem>
+        <GridItem>
+          <ActiveBusesWidget />
+        </GridItem>
+        <GridItem>
+          <AverageSpeedWidget />
+        </GridItem>
+      </Grid>
+      
+      {/* Charts section - responsive layout */}
+      <Grid 
+        gap={4} 
+        templateColumns={{
+          base: "1fr",                        // Mobile: 1 column
+          lg: "repeat(2, 1fr)"                // Desktop: 2 columns
+        }}
+      >
+        <GridItem 
+          colSpan={1}
+          minH="350px"                        // Ensure minimum height for charts
+        >
+          <TrainPunctualityWidget />
+        </GridItem>
+        <GridItem 
+          colSpan={1}
+          minH="350px"                        // Ensure minimum height for charts
+        >
+          <BusFrequencyChart />
+        </GridItem>
+      </Grid>
+      
+      {/* Table section - full width at all screen sizes */}
+      <Box width="100%" overflowX="auto">
         <UpcomingDeparturesTable />
+      </Box>
     </VStack>
   );
 };
