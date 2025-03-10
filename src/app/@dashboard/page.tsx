@@ -10,17 +10,15 @@ import { Filters } from "./_components/filters";
 
 const Dashboard = () => {
   return (
-    <VStack gap={4} align="stretch" padding={{ base: 2, md: 4 }}>
-      <Box overflowX={{ base: "auto", md: "visible" }} width="100%">
-        <Filters />
-      </Box>
+    <VStack gap={4} align="stretch" padding={4} width="100%">
+      <Filters />
       
-      {/* Small metric widgets - fully responsive with different layouts */}
+      {/* Metric cards section - responsive layout */}
       <Grid 
         gap={4} 
         templateColumns={{
           base: "1fr",                        // Mobile: 1 column
-          sm: "repeat(2, 1fr)",               // Small tablets: 2 columns
+          sm: "repeat(2, 1fr)",               // Tablet: 2 columns
           lg: "repeat(4, 1fr)"                // Desktop: 4 columns
         }}
       >
@@ -47,21 +45,31 @@ const Dashboard = () => {
         }}
       >
         <GridItem 
-          colSpan={1}
-          minH="350px"                        // Ensure minimum height for charts
+          bg="white"
+          borderRadius="lg"
+          boxShadow="sm"
+          overflow="hidden"
         >
           <TrainPunctualityWidget />
         </GridItem>
         <GridItem 
-          colSpan={1}
-          minH="350px"                        // Ensure minimum height for charts
+          bg="white"
+          borderRadius="lg"
+          boxShadow="sm"
+          overflow="hidden"
         >
           <BusFrequencyChart />
         </GridItem>
       </Grid>
       
       {/* Table section - full width at all screen sizes */}
-      <Box width="100%" overflowX="auto">
+      <Box 
+        width="100%" 
+        overflowX="auto"
+        bg="white"
+        borderRadius="lg"
+        boxShadow="sm"
+      >
         <UpcomingDeparturesTable />
       </Box>
     </VStack>
