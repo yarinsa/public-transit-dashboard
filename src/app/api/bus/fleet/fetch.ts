@@ -3,7 +3,7 @@ import { filter, tidy } from "@tidyjs/tidy";
 const REFRESH_INTERVAL = 60 * 60 * 24; // 24 hours
 const RESOURCE_ID = "d32171d2-7a47-4bb3-89cb-d11305c0692d";
 
-export async function getTrainOnTimeRate() {
+export async function getActiveBusesCount() {
   const limit = 1_000;
 
   const totalBuses = new URLSearchParams({
@@ -50,3 +50,5 @@ export async function getTrainOnTimeRate() {
       };
     }
   }
+
+export type ActiveBusesData = Awaited<ReturnType<typeof getActiveBusesCount>>;

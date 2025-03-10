@@ -1,4 +1,5 @@
 import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
+import { Suspense } from "react";
 import { ActiveBusesWidget } from "./_components/active-buses-widget";
 import { AverageSpeedWidget } from "./_components/average-speed-widget";
 import { BusFrequencyChart } from "./_components/bus-frequency-chart";
@@ -7,6 +8,20 @@ import { OnTimeRateWidget } from "./_components/train-on-time-rate-widget";
 import { TrainPunctualityWidget } from "./_components/train-punctuality-widget";
 import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
 import { Filters } from "./_components/filters";
+
+// Simple loading component
+function WidgetLoading() {
+  return (
+    <Box
+      bg="bg.subtle"
+      boxShadow="md"
+      borderRadius="md"
+      p={4}
+      height="100px"
+      animation="pulse 2s infinite"
+    />
+  );
+}
 
 const Dashboard = () => {
   return (
@@ -23,16 +38,24 @@ const Dashboard = () => {
         }}
       >
         <GridItem>
-          <OnTimeRateWidget />
+          <Suspense fallback={<WidgetLoading />}>
+            <OnTimeRateWidget />
+          </Suspense>
         </GridItem>
         <GridItem>
-          <DailyRidersWidget />
+          <Suspense fallback={<WidgetLoading />}>
+            <DailyRidersWidget />
+          </Suspense>
         </GridItem>
         <GridItem>
-          <ActiveBusesWidget />
+          <Suspense fallback={<WidgetLoading />}>
+            <ActiveBusesWidget />
+          </Suspense>
         </GridItem>
         <GridItem>
-          <AverageSpeedWidget />
+          <Suspense fallback={<WidgetLoading />}>
+            <AverageSpeedWidget />
+          </Suspense>
         </GridItem>
       </Grid>
       
@@ -50,7 +73,9 @@ const Dashboard = () => {
           boxShadow="sm"
           overflow="hidden"
         >
-          <TrainPunctualityWidget />
+          <Suspense fallback={<WidgetLoading />}>
+            <TrainPunctualityWidget />
+          </Suspense>
         </GridItem>
         <GridItem 
           bg="white"
@@ -58,7 +83,9 @@ const Dashboard = () => {
           boxShadow="sm"
           overflow="hidden"
         >
-          <BusFrequencyChart />
+          <Suspense fallback={<WidgetLoading />}>
+            <BusFrequencyChart />
+          </Suspense>
         </GridItem>
       </Grid>
       
@@ -70,7 +97,9 @@ const Dashboard = () => {
         borderRadius="lg"
         boxShadow="sm"
       >
-        <UpcomingDeparturesTable />
+        <Suspense fallback={<WidgetLoading />}>
+          <UpcomingDeparturesTable />
+        </Suspense>
       </Box>
     </VStack>
   );

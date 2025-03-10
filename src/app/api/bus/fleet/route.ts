@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getTrainOnTimeRate } from "./fetch";
+import { getActiveBusesCount } from "./fetch";
 export async function GET() {
-  const result = await getTrainOnTimeRate();
+  const result = await getActiveBusesCount();
   return NextResponse.json(result);
 }

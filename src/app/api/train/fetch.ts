@@ -90,8 +90,10 @@ export async function getTrainOnTimeRate() {
 
     // Format the output
     return {
-        value: `${currentRate.toFixed(1)}`,
-        change: change.toFixed(2),
+        value: Number(currentRate.toFixed(1)),
+        change: Number(change.toFixed(2)),
         period: `month`
     };
 }
+
+export type OnTimeRateData = Awaited<ReturnType<typeof getTrainOnTimeRate>>;

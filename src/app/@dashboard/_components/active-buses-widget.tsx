@@ -1,33 +1,20 @@
-'use client'
-import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { LuBusFront } from "react-icons/lu";
+import { Box, Text, VStack, HStack } from "@chakra-ui/react";
+import { BusIcon } from "@/components/icons";
 
 type ActiveBusesData = {
   active: number;
   total: number;
 }
 
-const useActiveBuses = () => {
-  const [data, setData] = useState<{ data?: ActiveBusesData, error?: unknown }>({});
+async function getActiveBusesData() {
+  const response = await fetch(new URL(`/api/bus/fleet`, process.env.NEXT_PUBLIC_API_URL), {
+  });
+  const data = await response.json();
+  return data.data as ActiveBusesData;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("/api/bus/fleet");
-      const data = await result.json();
-      setData(data);
-    };
-    fetchData();
-  }, []);
-
-  return { ...data }
-};
-
-
-
-export const ActiveBusesWidget = () => {
-  const { data } = useActiveBuses();
-  const { active, total } = data || { active: 0, total: 0 };
+export async function ActiveBusesWidget() {
+  const { active, total } = await getActiveBusesData();
 
   return (
     <Box
@@ -41,17 +28,17 @@ export const ActiveBusesWidget = () => {
           <Text>
             Active Buses
           </Text>
-          <Icon as={LuBusFront} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="orange.600" />
+          <BusIcon />
         </HStack>
         <HStack justify="space-between">
-        <Text fontSize="2xl" fontWeight="bold">
-          {Number(active).toLocaleString()}
-        </Text>
-        <Text fontSize="md" color="gray.500">
-          Out of {Number(total).toLocaleString()} total
-        </Text>
+          <Text fontSize="2xl" fontWeight="bold">
+            {Number(active).toLocaleString()}
+          </Text>
+          <Text fontSize="md" color="gray.500">
+            Out of {Number(total).toLocaleString()} total
+          </Text>
         </HStack>
       </VStack>
     </Box>
   );
-}; 
+} 
