@@ -44,8 +44,8 @@ export async function getTrainOnTimeRate() {
       console.error("Error fetching train data:", error);
       // Return a fallback object in case of errors
       return {
-        value: "0.0",
-        change: "0.0",
+        value: Number("0.0"),
+        change: Number("0.0"),
         period: "last week",
       };
     }

@@ -1,28 +1,16 @@
-'use client'
 import type { getDailyRiders } from "@/app/api/passengers/fetch";
-import { Box, Text, VStack, HStack, Icon } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { LuUsers } from "react-icons/lu";
+import { Box, Text, VStack, HStack } from "@chakra-ui/react";
+import { UsersIcon } from "@/components/icons";
 
-const useDailyRiders = () => {
-  // Placeholder for the hook that will fetch data
-  const [data, setData] = useState<Awaited<ReturnType<typeof getDailyRiders>>>();
+async function getDailyRidersData() {
+  const response = await fetch(new URL(`/api/passengers`, process.env.NEXT_PUBLIC_API_URL), {
+  });
+  const data = await response.json();
+  return data as Awaited<ReturnType<typeof getDailyRiders>>;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("/api/passengers");
-      const data = await result.json();
-      setData(data);
-    };
-    fetchData();
-  }, []);
-
-  return data ?? { value: 0, change: 0, period: "" };
-};
-
-
-export const DailyRidersWidget = () => {
-  const { value, change, period } = useDailyRiders();
+export async function DailyRidersWidget() {
+  const { value, change, period } = await getDailyRidersData();
 
   return (
     <Box
@@ -36,22 +24,22 @@ export const DailyRidersWidget = () => {
           <Text>
             Daily Riders
           </Text>
-          <Icon as={LuUsers} bgColor={`bg.emphasized`} p={2} borderRadius={`full`} boxSize={8} color="purple.600" />
+          <UsersIcon />
         </HStack>
         <HStack justify="space-between">
-        <Text fontSize="2xl" fontWeight="bold">
-          {value.toLocaleString()}
-        </Text>
-        <HStack>
-          <Text fontSize="md" color={Number(change) > 0 ? "green.500" : "red.500"}>
-            {change < 0 ? "↓" : "↑"} {Math.abs(change)}%
+          <Text fontSize="2xl" fontWeight="bold">
+            {value.toLocaleString()}
           </Text>
-          <Text fontSize="md" color="gray.500">
-            vs {period}
-          </Text>
-        </HStack>
+          <HStack>
+            <Text fontSize="md" color={Number(change) > 0 ? "green.500" : "red.500"}>
+              {change < 0 ? "↓" : "↑"} {Math.abs(change)}%
+            </Text>
+            <Text fontSize="md" color="gray.500">
+              vs {period}
+            </Text>
+          </HStack>
         </HStack>
       </VStack>
     </Box>
   );
-}; 
+} 
