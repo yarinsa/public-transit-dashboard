@@ -2,26 +2,13 @@ import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { ActiveBusesWidget } from "./_components/active-buses-widget";
 import { AverageSpeedWidget } from "./_components/average-speed-widget";
-import { BusFrequencyChart } from "./_components/bus-frequency-chart";
+import { BusFrequencyChart } from "./_components/bus-frequency-chart.server";
 import { DailyRidersWidget } from "./_components/daily-riders-widget";
 import { OnTimeRateWidget } from "./_components/train-on-time-rate-widget";
-import { TrainPunctualityWidget } from "./_components/train-punctuality-widget";
+import { TrainPunctualityWidget } from "./_components/train-punctuality-widget.server";
 import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
 import { Filters } from "./_components/filters";
-
-// Simple loading component
-function WidgetLoading() {
-  return (
-    <Box
-      bg="bg.subtle"
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-      height="100px"
-      animation="pulse 2s infinite"
-    />
-  );
-}
+import { WidgetLoading } from "./_components/loading";
 
 const Dashboard = () => {
   return (

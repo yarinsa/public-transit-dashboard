@@ -3,10 +3,16 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     // Mock data for demonstration
-    const data = {
-      days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      frequencies: [100, 150, 120, 130, 160, 90, 60],
-    };
+    const data = [
+      {day: 'Mon', frequency: 100},
+      {day: 'Tue', frequency: 150},
+      {day: 'Wed', frequency: 120},
+      {day: 'Thu', frequency: 130},
+      {day: 'Fri', frequency: 160},
+      {day: 'Sat', frequency: 90},
+      {day: 'Sun', frequency: 60},
+    ]
+
 
     return NextResponse.json(data);
   } catch (error) {

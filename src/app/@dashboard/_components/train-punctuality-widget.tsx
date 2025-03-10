@@ -1,34 +1,27 @@
 'use client'
 
 import { useColorMode } from "@/components/ui/color-mode";
-import { Box, Text, useToken, VStack } from "@chakra-ui/react";
+import { Box, Text, useToken, VStack, HStack } from "@chakra-ui/react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useEffect, useState } from "react";
+import { ChartIcon } from "@/components/icons";
 
-const useTrainPunctualityRate = () => {
-  // Placeholder for the hook that will fetch data
-  const [data, setData] = useState<{ data?: unknown[], error?: unknown }>({});
+export type TrainPunctualityData = {
+  month: number;
+  rate: number;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetch("/api/train-overtime");
-      const data = await result.json();
-      setData(data);
-    };
-    fetchData();
-  }, []);
+type TrainPunctualityWidgetProps = {
+  data: TrainPunctualityData[];
+}
 
-  return { ...data }
-};
-
-export const TrainPunctualityWidget = () => {
+export function TrainPunctualityWidgetClient({ data }: TrainPunctualityWidgetProps) {
   // Adaptive colors for light and dark modes
   const { colorMode } = useColorMode();
-  const [gray300,   gray500, green600] = useToken("colors", ["gray.300", "gray.500", "green.600"]);
+  const [gray300, gray500, green600] = useToken("colors", ["gray.300", "gray.500", "green.600"]);
   const axisColor = colorMode === "dark" ? gray300 : gray500;
   const gridColor = gray500;
   const lineColor = green600;
-  const {data} = useTrainPunctualityRate();
+
   return (
     <Box
       bg={`bg.subtle`}
@@ -38,9 +31,12 @@ export const TrainPunctualityWidget = () => {
       width="100%"
     >
       <VStack align="start">
-        <Text fontSize="md">
-          Train Punctuality Rate (%)
-        </Text>
+        <HStack justify="space-between" width="100%">
+          <Text fontSize="md">
+            Train Punctuality Rate (%)
+          </Text>
+          <ChartIcon />
+        </HStack>
         <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
           <LineChart data={data}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
@@ -49,7 +45,6 @@ export const TrainPunctualityWidget = () => {
               axisLine={false}
               tickLine={false}
               tickFormatter={(value) => {
-                console.log(value)
                 const date = new Date()
                 date.setMonth(value - 1)
                 const month = date.toLocaleString('default', { month: 'short' })
@@ -82,4 +77,5 @@ export const TrainPunctualityWidget = () => {
       </VStack>
     </Box>
   );
-};
+}
+
