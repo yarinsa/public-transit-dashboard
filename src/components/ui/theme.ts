@@ -18,4 +18,3 @@ const customConfig = defineConfig({
 });
 
 export const system = createSystem(defaultConfig, customConfig)
-console.log(system)

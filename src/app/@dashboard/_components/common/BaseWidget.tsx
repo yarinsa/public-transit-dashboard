@@ -1,8 +1,8 @@
-import { Box, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 type BaseWidgetProps = {
-  title: string;
+  title: ReactNode | string;
   icon: ReactNode;
   children: ReactNode;
 }
@@ -15,9 +15,9 @@ export function BaseWidget({ title, icon, children }: BaseWidgetProps) {
       borderRadius="md"
       p={4}
     >
-      <VStack align="stretch">
+      <VStack align="stretch" gap={8}>
         <HStack justify="space-between">
-          <Text>{title}</Text>
+          {typeof title === "string" ? <Text>{title}</Text> : title}
           {icon}
         </HStack>
         {children}

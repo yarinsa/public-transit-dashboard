@@ -1,35 +1,16 @@
-import { Box, Text, VStack, HStack } from "@chakra-ui/react";
 import { ClockIcon } from "@/components/icons";
-import { getTrainOnTimeRate } from "../../api/train/fetch";
-
-async function getOnTimeRateData() {
-  const response = await fetch(new URL(`/api/train`, process.env.NEXT_PUBLIC_API_URL), {
-  });
-  const data = await response.json();
-  return data as Awaited<ReturnType<typeof getTrainOnTimeRate>>;
-}
+import { HStack, Text } from "@chakra-ui/react";
+import { fetchApi } from "../_utils/api";
+import { BaseWidget } from "./common/BaseWidget";
 
 async function OnTimeRateWidget() {
-  const { value, change, period } = await getOnTimeRateData();
+  const { value, change, period } = await fetchApi<{value: number, change: number, period: string}>("train");
 
   return (
-    <Box
-      bg={`bg.subtle`}
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-    >
-      <VStack align="stretch">
-        <HStack justify="space-between">
-          <Text>
-            On-Time Rate
-          </Text>
-          <ClockIcon />
-        </HStack>
-
-        <HStack justify="space-between">
-          <Text fontSize="2xl" fontWeight="bold">
-            {value}%
+    <BaseWidget title="On-Time Rate" icon={<ClockIcon />}>
+      <HStack justify="space-between" alignItems="center">
+        <Text fontSize="2xl" fontWeight="bold">
+          {value}%
           </Text>
           <HStack>
             <Text fontSize="md" color={Number(change) > 0 ? "green.500" : "red.500"}>
@@ -40,8 +21,7 @@ async function OnTimeRateWidget() {
             </Text>
           </HStack>
         </HStack>
-      </VStack>
-    </Box>
+    </BaseWidget>
   );
 }
 

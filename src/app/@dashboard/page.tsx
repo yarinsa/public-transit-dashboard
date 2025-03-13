@@ -4,10 +4,9 @@ import { Filters } from "./_components/filters";
 import { WidgetLoading } from "./_components/loading";
 
 import dynamic from "next/dynamic";
-import { TrainPunctualityWidgetSkeleton } from "./_components/train-punctuality/train-punctuality-widget";
-import { BusFrequencyChartSkeleton } from "./_components/bus-frequency/bus-frequency-chart";
 import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
-
+import { BarChartSkeleton, LineChartSkeleton, MetricWidgetSkeleton } from "./_components/common/SkeletonWidgets";
+import { fetchApi } from "./_utils/api";
 const OnTimeRateWidget = dynamic(() => import("./_components/train-on-time-rate-widget").then((mod) => mod.default));
 const DailyRidersWidget = dynamic(() => import("./_components/daily-riders-widget").then((mod) => mod.default));
 const ActiveBusesWidget = dynamic(() => import("./_components/active-buses").then((mod) => mod.default));
@@ -15,7 +14,9 @@ const AverageSpeedWidget = dynamic(() => import("./_components/average-speed-wid
 const TrainPunctualityWidget = dynamic(() => import("./_components/train-punctuality").then((mod) => mod.TrainPunctualityWidget));
 const BusFrequencyChart = dynamic(() => import("./_components/bus-frequency").then((mod) => mod.default));
 
-const Dashboard = () => {
+const Dashboard = async () => {
+  const flags = await fetchApi<{ui_departures_table_visible: boolean}>("flags");
+
   return (
     <VStack gap={4} align="stretch" padding={4} width="100%">
       <Filters />
@@ -30,8 +31,8 @@ const Dashboard = () => {
         }}
       >
         {[OnTimeRateWidget, DailyRidersWidget, ActiveBusesWidget, AverageSpeedWidget].map((Widget, index) => (
-          <GridItem key={index} minHeight="100px">
-            <Suspense fallback={<WidgetLoading />}>
+          <GridItem key={index}>
+            <Suspense fallback={<MetricWidgetSkeleton />}>
               <Widget />
             </Suspense>
           </GridItem>
@@ -46,29 +47,22 @@ const Dashboard = () => {
           lg: "repeat(2, 1fr)"                // Desktop: 2 columns
         }}
       >
-        <GridItem 
-          bg="white"
-          borderRadius="lg"
-          boxShadow="sm"
-          overflow="hidden"
-        >
-          <Suspense fallback={<TrainPunctualityWidgetSkeleton />}>
-            <TrainPunctualityWidget />
-          </Suspense>
-        </GridItem>
-        <GridItem 
-          bg="white"
-          borderRadius="lg"
-          boxShadow="sm"
-          overflow="hidden"
-        >
-          <Suspense fallback={<BusFrequencyChartSkeleton />}>
-            <BusFrequencyChart />
-          </Suspense>
-        </GridItem>
+        {[[TrainPunctualityWidget,LineChartSkeleton],[BusFrequencyChart,BarChartSkeleton]].map(([Widget, Skeleton], index) => (
+          <GridItem 
+            key={index}
+            bg="white"
+            borderRadius="lg"
+            boxShadow="sm"
+            overflow="hidden"
+          >
+            <Suspense fallback={<Skeleton />}>
+              <Widget />
+            </Suspense>
+          </GridItem>
+        ))}
       </Grid>
-      
       {/* Table section - full width at all screen sizes */}
+      {flags.ui_departures_table_visible && (
           <Box 
             width="100%" 
             overflowX="auto"
@@ -80,6 +74,7 @@ const Dashboard = () => {
               <UpcomingDeparturesTable />
             </Suspense>
           </Box>
+      )}
     </VStack>
   );
 };

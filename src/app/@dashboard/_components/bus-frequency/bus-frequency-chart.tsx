@@ -5,6 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useColorMode } from "@/components/ui/color-mode";
 import { ChartIcon } from "@/components/icons";
 import { useEffect, useState } from "react";
+import { BaseChart } from "../common/BaseChart";
 export type BusFrequencyData = {
   day: string;
   frequency: number;
@@ -23,25 +24,10 @@ export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
   const barColor = orange600;
 
   return (
-    <Box
-      bg={`bg.subtle`}
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-      height="100%"
-      width="100%"
-    >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="md">
-            Bus Frequency Per Day
-          </Text>
-          <ChartIcon />
-        </HStack>
-        <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
-          <BarChart data={data}>
-            <CartesianGrid  vertical={false} strokeDasharray="3 3" stroke={gridColor} />
-            <XAxis
+    <BaseChart title="Bus Frequency Per Day" icon={<ChartIcon />}>
+      <BarChart data={data}>
+        <CartesianGrid  vertical={false} strokeDasharray="3 3" stroke={gridColor} />
+        <XAxis
               dataKey="day"
               axisLine={false}
               tickLine={false}
@@ -60,10 +46,8 @@ export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
               itemStyle={{ color: barColor }}
             />
             <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </VStack>
-    </Box>
+      </BarChart>
+    </BaseChart>
   );
 }
 
@@ -117,7 +101,7 @@ export function BusFrequencyChartSkeleton() {
               tick={{ fill: axisColor, fontSize: 12 }}
               interval={0} // Show all day labels
             />
-            <YAxis
+            <YAxis  
               axisLine={false}
               tickLine={false}
               tick={{ fill: axisColor, fontSize: 12 }}
