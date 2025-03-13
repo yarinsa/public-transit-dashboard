@@ -1,34 +1,16 @@
-import { Box, Text, VStack, HStack } from "@chakra-ui/react";
 import { SpeedIcon } from "@/components/icons";
+import { HStack, Text } from "@chakra-ui/react";
+import { fetchApi } from "../_utils/api";
+import { BaseWidget } from "./common/BaseWidget";
 
-async function getAverageSpeedData() {
-  return {
-    value: 100,
-    change: 10,
-    period: "day",
-  } as { value: number; change: number; period: string };
-}
-
-export async function AverageSpeedWidget() {
-  const { value, change, period } = await getAverageSpeedData();
+ async function AverageSpeedWidget() {
+  const { value, change, period } = await fetchApi<{value: number, change: number, period: string}>("bus/speed");
 
   return (
-    <Box
-      bg={`bg.subtle`}
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-    >
-      <VStack align="stretch">
-        <HStack justify="space-between">
-          <Text>
-            Average Speed
-          </Text>
-          <SpeedIcon />
-        </HStack>
-        <HStack justify="space-between">
-          <Text fontSize="2xl" fontWeight="bold">
-            {value} km/h
+    <BaseWidget title="Average Speed" icon={<SpeedIcon />}>
+      <HStack justify="space-between" alignItems="center">
+        <Text fontSize="2xl" fontWeight="bold">
+          {value} km/h
           </Text>
           <HStack>
             <Text fontSize="md" color={change < 0 ? "red.500" : "green.500"}>
@@ -39,7 +21,8 @@ export async function AverageSpeedWidget() {
             </Text>
           </HStack>
         </HStack>
-      </VStack>
-    </Box>
+      </BaseWidget>
   );
 } 
+
+export default AverageSpeedWidget;

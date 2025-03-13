@@ -1,9 +1,10 @@
 'use client'
 
-import { useColorMode } from "@/components/ui/color-mode";
-import { Box, Text, useToken, VStack, HStack } from "@chakra-ui/react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ChartIcon } from "@/components/icons";
+import { useColorMode } from "@/components/ui/color-mode";
+import { useToken } from "@chakra-ui/react";
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import { BaseChart } from "../common/BaseChart";
 
 export type TrainPunctualityData = {
   month: number;
@@ -21,25 +22,10 @@ export function TrainPunctualityWidgetClient({ data }: TrainPunctualityWidgetPro
   const axisColor = colorMode === "dark" ? gray300 : gray500;
   const gridColor = gray500;
   const lineColor = green600;
-
   return (
-    <Box
-      bg={`bg.subtle`}
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-      width="100%"
-    >
-      <VStack align="start">
-        <HStack justify="space-between" width="100%">
-          <Text fontSize="md">
-            Train Punctuality Rate (%)
-          </Text>
-          <ChartIcon />
-        </HStack>
-        <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
-          <LineChart data={data}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
+      <BaseChart title="Train Punctuality Rate (%)" icon={<ChartIcon />}>
+        <LineChart data={data}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={gridColor} />
             <XAxis
               dataKey="month"
               axisLine={false}
@@ -70,12 +56,9 @@ export function TrainPunctualityWidgetClient({ data }: TrainPunctualityWidgetPro
             <Tooltip
               contentStyle={{ backgroundColor: "white", border: "1px solid gray" }}
               labelStyle={{ color: "black" }}
-              itemStyle={{ color: lineColor }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </VStack>
-    </Box>
+            itemStyle={{ color: lineColor }}
+          />
+        </LineChart>
+      </BaseChart>
   );
 }
-

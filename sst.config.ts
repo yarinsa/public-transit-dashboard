@@ -12,7 +12,7 @@ export default $config({
   },
   async run() {
     new sst.aws.Nextjs("TransitDashboard", {
-      domain: "dashboard.yarinsa.me",
+      domain: $app.stage === "production" ? "dashboard.yarinsa.me" : `${$app.stage}.dashboard.yarinsa.me`,
     });
   },
 });

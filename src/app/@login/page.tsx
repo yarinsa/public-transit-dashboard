@@ -1,24 +1,24 @@
 'use client';
 
-import {
-    Button,
-    Container,
-    Heading,
-    Input,
-    Link,
-    Separator,
-    Stack,
-    Text,
-    VStack,
-    Spinner,
-    Box,
-    Flex,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { BsArrowRight, BsEnvelope } from 'react-icons/bs';
-import { motion } from 'framer-motion';
 import { Logo } from '@/components/logo';
-import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
+import { useColorModeValue } from '@/components/ui/color-mode';
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Input,
+  Link,
+  Separator,
+  Spinner,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { BsArrowRight } from 'react-icons/bs';
 // Create motion versions of Chakra UI components
 const MotionContainer = motion(Container);
 const MotionStack = motion(Stack);
@@ -79,10 +79,6 @@ const Login = () => {
     }
   };
 
-  const buttonVariants = {
-    hover: { scale: 1.05, transition: { duration: 0.2 } },
-    tap: { scale: 0.95 }
-  };
 
   return (
     <MotionContainer 

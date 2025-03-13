@@ -1,32 +1,15 @@
-import type { getDailyRiders } from "@/app/api/passengers/fetch";
-import { Box, Text, VStack, HStack } from "@chakra-ui/react";
 import { UsersIcon } from "@/components/icons";
-
-async function getDailyRidersData() {
-  const response = await fetch(new URL(`/api/passengers`, process.env.NEXT_PUBLIC_API_URL), {
-  });
-  const data = await response.json();
-  return data as Awaited<ReturnType<typeof getDailyRiders>>;
-}
-
-export async function DailyRidersWidget() {
-  const { value, change, period } = await getDailyRidersData();
+import { HStack, Text } from "@chakra-ui/react";
+import { fetchApi } from "../_utils/api";
+import { BaseWidget } from "./common/BaseWidget";
+  
+async function DailyRidersWidget() {
+  const { value, change, period } = await fetchApi<{value: number, change: number, period: string}>("passengers");
 
   return (
-    <Box
-      bg={`bg.subtle`}
-      boxShadow="md"
-      borderRadius="md"
-      p={4}
-    >
-      <VStack align="stretch">
-        <HStack justify="space-between">
-          <Text>
-            Daily Riders
-          </Text>
-          <UsersIcon />
-        </HStack>
-        <HStack justify="space-between">
+    <BaseWidget title="Daily Riders" icon={<UsersIcon />}>
+      <HStack justify="space-between" alignItems="center">
+        <HStack>
           <Text fontSize="2xl" fontWeight="bold">
             {value.toLocaleString()}
           </Text>
@@ -39,7 +22,9 @@ export async function DailyRidersWidget() {
             </Text>
           </HStack>
         </HStack>
-      </VStack>
-    </Box>
+      </HStack>
+    </BaseWidget>
   );
 } 
+
+export default DailyRidersWidget;

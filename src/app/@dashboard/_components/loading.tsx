@@ -1,14 +1,20 @@
 import { Box } from "@chakra-ui/react";
 
 // Simple loading component
-export function WidgetLoading() {
+type Props = {
+  height?: string;
+  width?: string;
+}
+
+export function WidgetLoading({ height = "100%", width = "100%" }: Props) {
   return (
     <Box
       bg="bg.subtle"
       boxShadow="md"
       borderRadius="md"
       p={4}
-      height="100%"
+      height={height}
+      width={width}
       animation="pulse 2s infinite" />
   );
 }

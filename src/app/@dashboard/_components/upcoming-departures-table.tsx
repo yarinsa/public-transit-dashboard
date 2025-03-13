@@ -1,10 +1,22 @@
 'use client'
 import type { DepartureDTO } from "@/app/api/upcoming-departures/schema";
 import { InputGroup } from "@/components/ui/input-group";
-import { Box, HStack, Icon, Input, Table, Text, VStack } from "@chakra-ui/react";
-import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
+import { Box, HStack, Icon, Input, SkeletonText, Table, Text, VStack } from "@chakra-ui/react";
+import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, RowData, useReactTable } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaClock, FaExclamationCircle, FaSearch } from "react-icons/fa";
+
+
+declare module '@tanstack/react-table' {
+  interface TableLoadingState {
+    isLoading: boolean;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface TableMeta<TData extends RowData> {
+    isLoading: boolean;
+  }
+}
 
 const useUpcomingDeparturesData =  () => {
   const [data, setData] = useState<DepartureDTO[]>([])
@@ -40,7 +52,11 @@ const columns = [
     }),
     helper.accessor('status', {
       header: 'Status',
-      cell: ({ getValue }) => {
+      cell: ({ getValue, table }) => {
+        const isLoading = table.options.meta?.isLoading;
+        if (isLoading) {
+          return <SkeletonText noOfLines={1} width="100px" />;
+        }
         let icon, color;
         const value = getValue();
         if (value === 'On Time') {
@@ -63,7 +79,11 @@ const columns = [
     }),
     helper.accessor('nextDeparture', {
       header: 'Next Departure',
-      cell: ({ getValue }) => {
+      cell: ({ getValue, table }) => {
+        const isLoading = table.options.meta?.isLoading;
+        if (isLoading) {
+          return <SkeletonText noOfLines={1} width="100px" />;
+        }
         const value = getValue();
         const localTime = new Date(value).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jerusalem' });
         return localTime;
@@ -141,7 +161,7 @@ export const UpcomingDeparturesTable = () => {
               <Table.Row key={row.id} borderBottom="1px solid" >
                 {row.getVisibleCells().map(cell => (
                   <Table.Cell key={cell.id} textAlign="left">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {table.options.meta?.isLoading ? <SkeletonText noOfLines={1} width="100px" /> : flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
                 ))}
               </Table.Row>
