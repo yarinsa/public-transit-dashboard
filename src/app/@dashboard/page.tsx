@@ -4,16 +4,16 @@ import { Filters } from "./_components/filters";
 import { WidgetLoading } from "./_components/loading";
 
 import dynamic from "next/dynamic";
-import { TrainPunctualityWidgetSkeleton } from "./_components/train-punctuality-widget";
-import { BusFrequencyChartSkeleton } from "./_components/bus-frequency-chart";
+import { TrainPunctualityWidgetSkeleton } from "./_components/train-punctuality/train-punctuality-widget";
+import { BusFrequencyChartSkeleton } from "./_components/bus-frequency/bus-frequency-chart";
 import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
 
 const OnTimeRateWidget = dynamic(() => import("./_components/train-on-time-rate-widget").then((mod) => mod.default));
 const DailyRidersWidget = dynamic(() => import("./_components/daily-riders-widget").then((mod) => mod.default));
-const ActiveBusesWidget = dynamic(() => import("./_components/active-buses-widget").then((mod) => mod.default));
+const ActiveBusesWidget = dynamic(() => import("./_components/active-buses").then((mod) => mod.default));
 const AverageSpeedWidget = dynamic(() => import("./_components/average-speed-widget").then((mod) => mod.default));
-const TrainPunctualityWidget = dynamic(() => import("./_components/train-punctuality-widget.server").then((mod) => mod.TrainPunctualityWidget));
-const BusFrequencyChart = dynamic(() => import("./_components/bus-frequency-chart.server").then((mod) => mod.BusFrequencyChart));
+const TrainPunctualityWidget = dynamic(() => import("./_components/train-punctuality").then((mod) => mod.TrainPunctualityWidget));
+const BusFrequencyChart = dynamic(() => import("./_components/bus-frequency").then((mod) => mod.default));
 
 const Dashboard = () => {
   return (
