@@ -2,9 +2,8 @@
 
 import { ChartIcon } from "@/components/icons";
 import { useColorMode } from "@/components/ui/color-mode";
-import { HStack, Text, useToken, VStack } from "@chakra-ui/react";
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { BaseWidget } from "../common/BaseWidget";
+import { useToken } from "@chakra-ui/react";
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 import { BaseChart } from "../common/BaseChart";
 
 export type TrainPunctualityData = {
