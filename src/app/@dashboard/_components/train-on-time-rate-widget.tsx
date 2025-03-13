@@ -9,7 +9,7 @@ async function getOnTimeRateData() {
   return data as Awaited<ReturnType<typeof getTrainOnTimeRate>>;
 }
 
-export async function OnTimeRateWidget() {
+async function OnTimeRateWidget() {
   const { value, change, period } = await getOnTimeRateData();
 
   return (
@@ -44,3 +44,5 @@ export async function OnTimeRateWidget() {
     </Box>
   );
 }
+
+export default OnTimeRateWidget;

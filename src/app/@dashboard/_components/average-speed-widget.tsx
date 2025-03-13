@@ -9,7 +9,7 @@ async function getAverageSpeedData() {
   } as { value: number; change: number; period: string };
 }
 
-export async function AverageSpeedWidget() {
+ async function AverageSpeedWidget() {
   const { value, change, period } = await getAverageSpeedData();
 
   return (
@@ -43,3 +43,5 @@ export async function AverageSpeedWidget() {
     </Box>
   );
 } 
+
+export default AverageSpeedWidget;

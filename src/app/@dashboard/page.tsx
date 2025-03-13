@@ -1,14 +1,19 @@
 import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { Suspense } from "react";
-import { ActiveBusesWidget } from "./_components/active-buses-widget";
-import { AverageSpeedWidget } from "./_components/average-speed-widget";
-import { BusFrequencyChart } from "./_components/bus-frequency-chart.server";
-import { DailyRidersWidget } from "./_components/daily-riders-widget";
-import { OnTimeRateWidget } from "./_components/train-on-time-rate-widget";
-import { TrainPunctualityWidget } from "./_components/train-punctuality-widget.server";
-import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
 import { Filters } from "./_components/filters";
 import { WidgetLoading } from "./_components/loading";
+
+import dynamic from "next/dynamic";
+import { TrainPunctualityWidgetSkeleton } from "./_components/train-punctuality-widget";
+import { BusFrequencyChartSkeleton } from "./_components/bus-frequency-chart";
+import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
+
+const OnTimeRateWidget = dynamic(() => import("./_components/train-on-time-rate-widget").then((mod) => mod.default));
+const DailyRidersWidget = dynamic(() => import("./_components/daily-riders-widget").then((mod) => mod.default));
+const ActiveBusesWidget = dynamic(() => import("./_components/active-buses-widget").then((mod) => mod.default));
+const AverageSpeedWidget = dynamic(() => import("./_components/average-speed-widget").then((mod) => mod.default));
+const TrainPunctualityWidget = dynamic(() => import("./_components/train-punctuality-widget.server").then((mod) => mod.TrainPunctualityWidget));
+const BusFrequencyChart = dynamic(() => import("./_components/bus-frequency-chart.server").then((mod) => mod.BusFrequencyChart));
 
 const Dashboard = () => {
   return (
@@ -24,26 +29,13 @@ const Dashboard = () => {
           lg: "repeat(4, 1fr)"                // Desktop: 4 columns
         }}
       >
-        <GridItem>
-          <Suspense fallback={<WidgetLoading />}>
-            <OnTimeRateWidget />
-          </Suspense>
-        </GridItem>
-        <GridItem>
-          <Suspense fallback={<WidgetLoading />}>
-            <DailyRidersWidget />
-          </Suspense>
-        </GridItem>
-        <GridItem>
-          <Suspense fallback={<WidgetLoading />}>
-            <ActiveBusesWidget />
-          </Suspense>
-        </GridItem>
-        <GridItem>
-          <Suspense fallback={<WidgetLoading />}>
-            <AverageSpeedWidget />
-          </Suspense>
-        </GridItem>
+        {[OnTimeRateWidget, DailyRidersWidget, ActiveBusesWidget, AverageSpeedWidget].map((Widget, index) => (
+          <GridItem key={index} minHeight="100px">
+            <Suspense fallback={<WidgetLoading />}>
+              <Widget />
+            </Suspense>
+          </GridItem>
+        ))}
       </Grid>
       
       {/* Charts section - responsive layout */}
@@ -60,7 +52,7 @@ const Dashboard = () => {
           boxShadow="sm"
           overflow="hidden"
         >
-          <Suspense fallback={<WidgetLoading />}>
+          <Suspense fallback={<TrainPunctualityWidgetSkeleton />}>
             <TrainPunctualityWidget />
           </Suspense>
         </GridItem>
@@ -70,24 +62,24 @@ const Dashboard = () => {
           boxShadow="sm"
           overflow="hidden"
         >
-          <Suspense fallback={<WidgetLoading />}>
+          <Suspense fallback={<BusFrequencyChartSkeleton />}>
             <BusFrequencyChart />
           </Suspense>
         </GridItem>
       </Grid>
       
       {/* Table section - full width at all screen sizes */}
-      <Box 
-        width="100%" 
-        overflowX="auto"
-        bg="white"
-        borderRadius="lg"
-        boxShadow="sm"
-      >
-        <Suspense fallback={<WidgetLoading />}>
-          <UpcomingDeparturesTable />
-        </Suspense>
-      </Box>
+          <Box 
+            width="100%" 
+            overflowX="auto"
+            bg="white"
+            borderRadius="lg"
+            boxShadow="sm"
+          >
+            <Suspense fallback={<WidgetLoading />}>
+              <UpcomingDeparturesTable />
+            </Suspense>
+          </Box>
     </VStack>
   );
 };

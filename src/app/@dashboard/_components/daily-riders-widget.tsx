@@ -9,7 +9,7 @@ async function getDailyRidersData() {
   return data as Awaited<ReturnType<typeof getDailyRiders>>;
 }
 
-export async function DailyRidersWidget() {
+async function DailyRidersWidget() {
   const { value, change, period } = await getDailyRidersData();
 
   return (
@@ -43,3 +43,5 @@ export async function DailyRidersWidget() {
     </Box>
   );
 } 
+
+export default DailyRidersWidget;

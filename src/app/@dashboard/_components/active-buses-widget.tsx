@@ -13,7 +13,7 @@ async function getActiveBusesData() {
   return data.data as ActiveBusesData;
 }
 
-export async function ActiveBusesWidget() {
+ async function ActiveBusesWidget() {
   const { active, total } = await getActiveBusesData();
 
   return (
@@ -42,3 +42,5 @@ export async function ActiveBusesWidget() {
     </Box>
   );
 } 
+
+export default ActiveBusesWidget;

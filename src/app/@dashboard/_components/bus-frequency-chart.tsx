@@ -4,7 +4,7 @@ import { Box, Text, useToken, VStack, HStack } from "@chakra-ui/react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useColorMode } from "@/components/ui/color-mode";
 import { ChartIcon } from "@/components/icons";
-
+import { useEffect, useState } from "react";
 export type BusFrequencyData = {
   day: string;
   frequency: number;
@@ -67,3 +67,71 @@ export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
   );
 }
 
+
+export function BusFrequencyChartSkeleton() {
+  const { colorMode } = useColorMode();
+  const [gray300, gray500, gray600] = useToken("colors", ["gray.300", "gray.500", "gray.600"]);
+  // Adaptive colors for light and dark modes
+  const axisColor = colorMode === "dark" ? gray300 : gray500;
+  const gridColor = gray500;
+  const barColor = gray600;
+
+  const createData = () => {
+    return Array.from({ length: 7 }, (_, i) => ({
+      day: `Day ${i + 1}`,
+      frequency: Math.random() * 200,
+    }));
+  }
+
+  const [data, setData] = useState<BusFrequencyData[]>(createData());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData(createData());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <Box
+      bg={`bg.subtle`}
+      boxShadow="md"
+      borderRadius="md"
+      p={4}
+      height="100%"
+      width="100%"
+    >
+      <VStack align="start">
+        <HStack justify="space-between" width="100%">
+          <Text fontSize="md">
+            Bus Frequency Per Day
+          </Text>
+          <ChartIcon />
+        </HStack>
+        <ResponsiveContainer width="100%" height={300} style={{marginTop: "16px"}}>
+          <BarChart data={data}>
+            <CartesianGrid  vertical={false} strokeDasharray="3 3" stroke={gridColor} />
+            <XAxis
+              dataKey="day"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: axisColor, fontSize: 12 }}
+              interval={0} // Show all day labels
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: axisColor, fontSize: 12 }}
+              domain={[0, 200]} // Adjust based on data range
+            />
+            <Tooltip
+              contentStyle={{ backgroundColor: "white", border: "1px solid gray" }}
+              labelStyle={{ color: "black" }}
+              itemStyle={{ color: barColor }}
+            />
+            <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </VStack>
+    </Box>
+  );
+}
