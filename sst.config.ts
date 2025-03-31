@@ -15,7 +15,7 @@ export default $config({
     new sst.aws.Nextjs("TransitDashboard", {
       domain,
       environment: {
-        NEXT_PUBLIC_API_URL: domain,
+        NEXT_PUBLIC_API_URL: new URL(`https://${domain}`).toString(),
       },
     });
   },

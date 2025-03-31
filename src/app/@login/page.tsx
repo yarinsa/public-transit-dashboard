@@ -44,7 +44,9 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`/api/auth/login?email=${encodeURIComponent(email)}`, {
+      const url = new URL(`/api/auth/login`, process.env.NEXT_PUBLIC_API_URL);
+      url.searchParams.set('email', email);
+      const response = await fetch(url, {
         method: 'GET',
       });
       
