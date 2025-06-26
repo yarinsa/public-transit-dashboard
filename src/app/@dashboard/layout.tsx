@@ -1,6 +1,7 @@
 import { VStack, Box } from "@chakra-ui/react";
 import Nav from "./_components/Nav";
 import GradientBackground from "./_components/GradientBackground";
+import GlassyFooter from "./_components/GlassyFooter";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,6 +11,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <Nav />
         {children}
       </VStack>
+      <GlassyFooter />
     </Box>
   );
 };
