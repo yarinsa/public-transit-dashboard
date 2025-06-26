@@ -1,10 +1,10 @@
 'use client'
 
-import { Box, Text, useToken, VStack, HStack } from "@chakra-ui/react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useColorMode } from "@/components/ui/color-mode";
 import { ChartIcon } from "@/components/icons";
+import { useColorMode } from "@/components/ui/color-mode";
+import { Box, HStack, Text, useToken, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { BaseChart } from "../common/BaseChart";
 export type BusFrequencyData = {
   day: string;
@@ -15,17 +15,49 @@ type BusFrequencyChartProps = {
   data: BusFrequencyData[];
 }
 
+// Glassy bar background shape
+const GlassBar = (props: any) => {
+  const { x = 0, y = 0, width = 0, height = 0 } = props;
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        rx={4}
+        ry={4}
+        width={width}
+        height={height}
+        fill="rgba(33, 150, 243,0.1)"
+        filter="url(#glass-blur)"
+        style={{ stroke: "rgba(33, 150, 243,0.2)", strokeWidth: 1 }}
+      />
+      <Rectangle {...props} />
+    </g>
+  );
+};
+
 export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
   const { colorMode } = useColorMode();
-  const [gray300, gray500, orange600] = useToken("colors", ["gray.300", "gray.500", "orange.600"]);
+  const [gray300, gray500] = useToken("colors", ["gray.300", "gray.500", "orange.600"]);
   // Adaptive colors for light and dark modes
   const axisColor = colorMode === "dark" ? gray300 : gray500;
   const gridColor = gray500;
-  const barColor = orange600;
+  const barColor = 'rgba(33, 150, 243,0.75)'; // Vibrant blue
 
   return (
     <BaseChart title="Bus Frequency Per Day" icon={<ChartIcon />}>
       <BarChart data={data}>
+        <defs>
+          <filter id="glass-blur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+            <feColorMatrix in="blur" type="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      0 0 0 18 -7"/>
+            <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+          </filter>
+        </defs>
         <CartesianGrid  vertical={false} strokeDasharray="3 3" stroke={gridColor} />
         <XAxis
               dataKey="day"
@@ -45,7 +77,7 @@ export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
               labelStyle={{ color: "black" }}
               itemStyle={{ color: barColor }}
             />
-            <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} shape={GlassBar} />
       </BarChart>
     </BaseChart>
   );

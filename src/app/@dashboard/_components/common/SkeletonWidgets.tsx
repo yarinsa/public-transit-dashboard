@@ -10,7 +10,7 @@ import { useColorModeValue } from "@/components/ui/color-mode";
 // Simple metric widget skeleton
 export function MetricWidgetSkeleton() {
   return (
-    <BaseWidget title={<SkeletonText noOfLines={1} width="100px" />} icon={<SkeletonCircle size="8" />}>
+    <BaseWidget title={<SkeletonText noOfLines={1} width="100px" />} icon={<SkeletonCircle size="8" />} >
       <HStack alignSelf="stretch" justify="space-between">
         <SkeletonText noOfLines={1} width="80px" />
         <SkeletonText noOfLines={1} width="120px" />

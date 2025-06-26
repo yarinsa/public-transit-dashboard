@@ -11,12 +11,14 @@ export default $config({
     };
   },
   async run() {
-    const domain = $app.stage === "production" ? "dashboard.yarinsa.me" : `${$app.stage}.dashboard.yarinsa.me`;
-    new sst.aws.Nextjs("TransitDashboard", {
+    const domain = $app.stage === "production" ? "dashboard.yarinsa.me" : undefined;
+    const app = new sst.aws.Nextjs("TransitDashboard", {
       domain,
       environment: {
-        NEXT_PUBLIC_API_URL: new URL(`https://${domain}`).toString(),
+        NEXT_PUBLIC_API_URL: domain ? new URL(`https://${domain}`).toString() : ``,
       },
-    });
+    })
+    
+    console.log(app.url);
   },
 });

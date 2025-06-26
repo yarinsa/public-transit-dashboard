@@ -1,23 +1,16 @@
-import { Heading, HStack, VStack } from "@chakra-ui/react";
-import { LuTrainFront } from "react-icons/lu";
-import { LogoutButton } from "./_components/LogoutButton";
+import { VStack, Box } from "@chakra-ui/react";
+import Nav from "./_components/Nav";
+import GradientBackground from "./_components/GradientBackground";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <VStack align="stretch" gap={4} >
-    <HStack justify="space-between" align="center" bg={`bg`} boxShadow="md" borderRadius="md" p={4}>
-
-        <HStack align="center" gap={4}>
-        <LuTrainFront size={`24px`} />
-        <VStack align="start" gap={0}>
-
-        <Heading size="lg">Transit Metrics</Heading>
-        </VStack>
-        </HStack>
-        <LogoutButton />
-    </HStack>
-      {children}
-    </VStack>
+    <Box position="relative" minH="100vh" height="100vh">
+      <GradientBackground />
+      <VStack align="stretch" gap={4} position="relative" zIndex={1}>
+        <Nav />
+        {children}
+      </VStack>
+    </Box>
   );
 };
 
