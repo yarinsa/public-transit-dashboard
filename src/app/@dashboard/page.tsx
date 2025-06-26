@@ -1,12 +1,11 @@
 import { Box, VStack } from "@chakra-ui/react";
-import { Suspense } from "react";
-import { Filters } from "./_components/filters";
-import { WidgetLoading } from "./_components/loading";
 import dynamic from "next/dynamic";
-import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
+import { Suspense } from "react";
 import { BarChartSkeleton, LineChartSkeleton, MetricWidgetSkeleton } from "./_components/common/SkeletonWidgets";
-import { fetchApi } from "./_utils/api";
 import GridLayoutClient from "./_components/GridLayoutClient";
+import { WidgetLoading } from "./_components/loading";
+import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
+import { fetchApi } from "./_utils/api";
 
 const OnTimeRateWidget = dynamic(() => import("./_components/train-on-time-rate-widget").then((mod) => mod.default));
 const DailyRidersWidget = dynamic(() => import("./_components/daily-riders-widget").then((mod) => mod.default));
@@ -81,7 +80,7 @@ const Dashboard = async () => {
         style={{ width: "100%" }}
       >
         <div key="onTime">
-          <Suspense fallback={<MetricWidgetSkeleton />} >
+          <Suspense fallback={<MetricWidgetSkeleton />}>
             <OnTimeRateWidget />
           </Suspense>
         </div>
@@ -116,7 +115,7 @@ const Dashboard = async () => {
           </Suspense>
         </div>
         <div key="busfreq">
-          <Suspense fallback={<BarChartSkeleton />}>
+          <Suspense fallback={<BarChartSkeleton />}> 
             <BusFrequencyChart />
           </Suspense>
         </div>

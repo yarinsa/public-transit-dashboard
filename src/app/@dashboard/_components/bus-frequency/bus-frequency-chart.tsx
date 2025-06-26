@@ -6,6 +6,7 @@ import { Box, HStack, Text, useToken, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { BaseChart } from "../common/BaseChart";
+
 export type BusFrequencyData = {
   day: string;
   frequency: number;
@@ -15,8 +16,8 @@ type BusFrequencyChartProps = {
   data: BusFrequencyData[];
 }
 
-// Glassy bar background shape
-const GlassBar = (props: any) => {
+// Glassmorphic Bar Chart for Bus Frequency
+const GlassBar = (props: Partial<{ x: number; y: number; width: number; height: number }>) => {
   const { x = 0, y = 0, width = 0, height = 0 } = props;
   return (
     <g>
@@ -38,8 +39,7 @@ const GlassBar = (props: any) => {
 
 export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
   const { colorMode } = useColorMode();
-  const [gray300, gray500] = useToken("colors", ["gray.300", "gray.500", "orange.600"]);
-  // Adaptive colors for light and dark modes
+  const [gray300, gray500] = useToken("colors", ["gray.300", "gray.500"]);
   const axisColor = colorMode === "dark" ? gray300 : gray500;
   const gridColor = gray500;
   const barColor = 'rgba(33, 150, 243,0.75)'; // Vibrant blue
@@ -73,9 +73,19 @@ export function BusFrequencyChartClient({ data }: BusFrequencyChartProps) {
               domain={[0, 200]} // Adjust based on data range
             />
             <Tooltip
-              contentStyle={{ backgroundColor: "white", border: "1px solid gray" }}
-              labelStyle={{ color: "black" }}
-              itemStyle={{ color: barColor }}
+              contentStyle={{
+                background: "rgba(255,255,255,0.45)",
+                backdropFilter: "blur(16px)",
+                border: "1px solid rgba(33,150,243,0.2)",
+                borderRadius: 12,
+                boxShadow: "0 4px 24px rgba(33,150,243,0.08)",
+                color: "#111",
+                fontWeight: 700,
+                fontSize: 16,
+              }}
+              labelStyle={{ color: "#111", fontWeight: 700, fontSize: 16 }}
+              itemStyle={{ color: barColor, fontWeight: 600, fontSize: 15 }}
+              cursor={{ fill: "none" }}
             />
             <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} shape={GlassBar} />
       </BarChart>
@@ -140,9 +150,19 @@ export function BusFrequencyChartSkeleton() {
               domain={[0, 200]} // Adjust based on data range
             />
             <Tooltip
-              contentStyle={{ backgroundColor: "white", border: "1px solid gray" }}
-              labelStyle={{ color: "black" }}
-              itemStyle={{ color: barColor }}
+              contentStyle={{
+                background: "rgba(255,255,255,0.45)",
+                backdropFilter: "blur(16px)",
+                border: "1px solid rgba(33,150,243,0.2)",
+                borderRadius: 12,
+                boxShadow: "0 4px 24px rgba(33,150,243,0.08)",
+                color: "#111",
+                fontWeight: 700,
+                fontSize: 16,
+              }}
+              labelStyle={{ color: "#111", fontWeight: 700, fontSize: 16 }}
+              itemStyle={{ color: barColor, fontWeight: 600, fontSize: 15 }}
+              cursor={{ fill: "none" }}
             />
             <Bar dataKey="frequency" fill={barColor} radius={[4, 4, 0, 0]} />
           </BarChart>
