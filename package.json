@@ -35,5 +35,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "bun@1.2.2"
 }
