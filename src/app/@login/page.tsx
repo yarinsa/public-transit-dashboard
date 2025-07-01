@@ -30,13 +30,12 @@ const MotionSeparator = motion(Separator);
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
   // Colors for theme consistency
-  const bgColor = useColorModeValue(`white`, `gray.800`)
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
   const accentColor = useColorModeValue('blue.500', 'blue.300');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,23 +82,124 @@ const Login = () => {
 
 
   return (
-    <MotionContainer 
-      margin={`auto`} 
-      maxW="md" 
-      py={{ base: '12', md: '24' }} 
-      px={{base: 4, md: 8}}
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <>
+      {/* Vibrant Animated Background */}
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        w="100vw"
+        h="100vh"
+        zIndex={0}
+        style={{
+          background: "linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)",
+          backgroundSize: "400% 400%",
+          animation: "gradientShift 8s ease-in-out infinite"
+        }}
+      />
+      
+      {/* Override body background for login page */}
+      <style>{`
+        body {
+          background: transparent !important;
+        }
+      `}</style>
+      
+      {/* Floating Elements */}
+      <Box
+        position="fixed"
+        top="10%"
+        left="15%"
+        w="200px"
+        h="200px"
+        borderRadius="full"
+        bg="rgba(255,255,255,0.1)"
+        filter="blur(40px)"
+        zIndex={1}
+        style={{
+          animation: "float1 6s ease-in-out infinite"
+        }}
+      />
+      <Box
+        position="fixed"
+        top="60%"
+        right="10%"
+        w="300px"
+        h="300px"
+        borderRadius="full"
+        bg="rgba(255,255,255,0.08)"
+        filter="blur(60px)"
+        zIndex={1}
+        style={{
+          animation: "float2 8s ease-in-out infinite"
+        }}
+      />
+      <Box
+        position="fixed"
+        bottom="20%"
+        left="20%"
+        w="150px"
+        h="150px"
+        borderRadius="full"
+        bg="rgba(255,255,255,0.12)"
+        filter="blur(30px)"
+        zIndex={1}
+        style={{
+          animation: "float3 7s ease-in-out infinite"
+        }}
+      />
+
+      {/* Global Styles for Animations */}
+      <style>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          25% { background-position: 100% 50%; }
+          50% { background-position: 100% 100%; }
+          75% { background-position: 0% 100%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(30px, -30px) rotate(120deg); }
+          66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        @keyframes float2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-40px, -20px) rotate(180deg); }
+        }
+        
+        @keyframes float3 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(20px, -40px) rotate(90deg); }
+          50% { transform: translate(-30px, -20px) rotate(180deg); }
+          75% { transform: translate(10px, 30px) rotate(270deg); }
+        }
+      `}</style>
+
+      <MotionContainer 
+        margin={`auto`} 
+        maxW="md" 
+        py={{ base: '12', md: '24' }} 
+        px={{base: 4, md: 8}}
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        position="relative"
+        zIndex={10}
+      >
       <MotionBox 
         variants={itemVariants}
         p={8}
-        borderRadius="xl"
-        boxShadow="lg"
-        bg={bgColor}
-        borderWidth="1px"
-        borderColor={borderColor}
+        borderRadius="2xl"
+        boxShadow="0 8px 32px 0 rgba(31, 38, 135, 0.18)"
+        bg="rgba(255,255,255,0.35)"
+        backdropFilter="blur(16px)"
+        border="1.5px solid"
+        borderColor="transparent"
+        overflow="hidden"
+        position="relative"
       >
         <MotionStack gap="8" variants={containerVariants}>
           <MotionFlex justifyContent="center" mb={4}>
@@ -159,6 +259,7 @@ const Login = () => {
         </MotionStack>
       </MotionBox>
     </MotionContainer>
+    </>
   );
 };
 

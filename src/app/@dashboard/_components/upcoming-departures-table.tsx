@@ -22,7 +22,7 @@ const useUpcomingDeparturesData =  () => {
   const [data, setData] = useState<DepartureDTO[]>([])
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/api/upcoming-departures')
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upcoming-departures`)
       const data = await response.json()
       setData(data.data)
     }

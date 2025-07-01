@@ -1,18 +1,37 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { BarChartSkeleton, LineChartSkeleton, MetricWidgetSkeleton } from "./_components/common/SkeletonWidgets";
+import {
+  BarChartSkeleton,
+  LineChartSkeleton,
+  MetricWidgetSkeleton,
+} from "./_components/common/SkeletonWidgets";
+import ConditionalDeparturesTable from "./_components/conditional-departures-table";
 import GridLayoutClient from "./_components/GridLayoutClient";
 import { WidgetLoading } from "./_components/loading";
-import { UpcomingDeparturesTable } from "./_components/upcoming-departures-table";
-import { fetchApi } from "./_utils/api";
 
-const OnTimeRateWidget = dynamic(() => import("./_components/train-on-time-rate-widget").then((mod) => mod.default));
-const DailyRidersWidget = dynamic(() => import("./_components/daily-riders-widget").then((mod) => mod.default));
-const ActiveBusesWidget = dynamic(() => import("./_components/active-buses").then((mod) => mod.default));
-const AverageSpeedWidget = dynamic(() => import("./_components/average-speed-widget").then((mod) => mod.default));
-const TrainPunctualityWidget = dynamic(() => import("./_components/train-punctuality").then((mod) => mod.TrainPunctualityWidget));
-const BusFrequencyChart = dynamic(() => import("./_components/bus-frequency").then((mod) => mod.default));
+const OnTimeRateWidget = dynamic(() =>
+  import("./_components/train-on-time-rate-widget").then((mod) => mod.default)
+);
+const DailyRidersWidget = dynamic(() =>
+  import("./_components/daily-riders-widget").then((mod) => mod.default)
+);
+const ActiveBusesWidget = dynamic(() =>
+  import("./_components/active-buses").then((mod) => mod.default)
+);
+const AverageSpeedWidget = dynamic(() =>
+  import("./_components/average-speed-widget").then((mod) => mod.default)
+);
+const TrainPunctualityWidget = dynamic(() =>
+  import("./_components/train-punctuality").then(
+    (mod) => mod.TrainPunctualityWidget
+  )
+);
+const BusFrequencyChart = dynamic(() =>
+  import("./_components/bus-frequency").then((mod) => mod.default)
+);
+
+export const experimental_ppr = true;
 
 const metricLayouts = {
   lg: [
@@ -65,8 +84,6 @@ const metricCols = { lg: 4, md: 2, sm: 1, xs: 1 };
 const chartCols = { lg: 2, md: 2, sm: 1, xs: 1 };
 
 const Dashboard = async () => {
-  const flags = await fetchApi<{ui_departures_table_visible: boolean}>("flags");
-
   return (
     <VStack gap={4} align="stretch" padding={4} width="100%">
       {/* <Filters /> */}
@@ -115,25 +132,15 @@ const Dashboard = async () => {
           </Suspense>
         </div>
         <div key="busfreq">
-          <Suspense fallback={<BarChartSkeleton />}> 
+          <Suspense fallback={<BarChartSkeleton />}>
             <BusFrequencyChart />
           </Suspense>
         </div>
       </GridLayoutClient>
-      {/* Table section - full width at all screen sizes */}
-      {flags.ui_departures_table_visible && (
-        <Box
-          width="100%"
-          overflowX="auto"
-          bg="white"
-          borderRadius="lg"
-          boxShadow="sm"
-        >
-          <Suspense fallback={<WidgetLoading />}>
-            <UpcomingDeparturesTable />
-          </Suspense>
-        </Box>
-      )}
+      {/* Table section - conditionally loaded with its own flags fetch */}
+      <Suspense fallback={<WidgetLoading />}>
+        <ConditionalDeparturesTable />
+      </Suspense>
     </VStack>
   );
 };

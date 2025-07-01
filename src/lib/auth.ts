@@ -8,7 +8,7 @@ const isLoggedIn = async () => {
         const user_email = cookied.get(cookieName);
         return user_email ? true : false;
     } else {
-        const res = await fetch(`/api/auth/session`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/session`, {
             method: 'GET',
         });
         const data = await res.json();
@@ -17,7 +17,7 @@ const isLoggedIn = async () => {
 };
 
 const logout = async () => {
-    return fetch('/api/auth/logout', {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
         method: 'GET',
     });
 }
